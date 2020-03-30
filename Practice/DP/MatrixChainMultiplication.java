@@ -22,6 +22,8 @@
 package DP;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 
 /*
     *  The {@code MatrixChainMultiplication} class provides a client for multiplying
@@ -71,8 +73,40 @@ public class MatrixChainMultiplication {
     }
 
     public static void main(String args[]) {
-        int[] p = {1, 5, 3, 9, 5};
-        int size = p.length;
-        System.out.println("Minimum number of multiplications required to multiply for given matrices is " + multiplier(p, size));
+        int[][][] matrices = { { {3,5,9,10},
+                                 {8,3,2,12},
+                                 {4,5,21,9}
+                                },
+                                { {1},
+                                  {2},
+                                  {3},
+                                  {4}
+                                },
+                                { {1,2}
+                                },
+                                { {45,67,9},
+                                  {6,8,10},
+                                  {24,64,90}
+                                }
+                             };
+        int count = matrices.length;
+        int sizes[] = new int[matrices.length];
+        for(int i=0; i < matrices.length; i++) {
+            int j = 0;
+            for(int k = 0; k < matrices[i][j].length; k++) {
+                if( (i < matrices.length-1)) {
+                    if (matrices[i][j].length == matrices[i+1].length)
+                        sizes[i] = matrices[i].length;
+                    else
+                        System.out.println("Given sequence of matrices can't be multiplied as their columns and rows are not matching");
+                        break;
+                }
+                else if( i == matrices.length-1) {
+                    sizes[i] = matrices[i].length;
+                }
+            }
+        }
+        System.out.println("Sizes of given sequence of arrays in 2 dimensions is " +Arrays.toString(sizes));
+        System.out.println("Minimum number of multiplications required to multiply for given matrices is " + multiplier(sizes, count));
     }
 }
