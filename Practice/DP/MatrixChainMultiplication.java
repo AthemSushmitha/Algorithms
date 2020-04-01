@@ -41,19 +41,18 @@ import java.util.Iterator;
         * Number of mid points taken to multiply.. let's say N
      O(N(N+1)/2) * N) = O(N^3)
 */
+
 public class MatrixChainMultiplication {
     /* Function to multiply given list of matrices. This function takes two parameters
          1) Array with sizes of matrices
          2) Number of matrices to multiply
-
      */
     static int multiplier(int p[], int n) {
         int temp[][] = new int[n][n];
         int order[][] = new int[n][n];
         int row, col, mid, len, res;
-        for (row = 1; row < n; row++) { // fills temp[][] diagonal with zeros from row 1
+        for (row = 1; row < n; row++) // fills temp[][] diagonal with zeros from row 1
             temp[row][row] = 0;
-        }
 
         for (len = 2; len < n; len++) { // length of matrices multiplying at a point
             for (row = 1; row < n-len+1; row++) { // iteration on rows
@@ -69,7 +68,28 @@ public class MatrixChainMultiplication {
             }
         }
         System.out.println(Arrays.deepToString(order));
+        System.out.println(Arrays.deepToString(temp));
         return temp[1][n-1];
+    }
+
+    private static int[] calculateSizes(int[][][] matrices, int count) {
+        int sizes[] = new int[count+1];
+        for(int i=0; i <= count; i++) {
+            int j = 0;
+            if (i == 0)
+                sizes[i] = matrices[i].length;
+            else if (i == count)
+                sizes[i] = matrices[i-1][j].length;
+            else if( ( i > 0 && i < count)) {
+                if (matrices[i-1][j].length == matrices[i].length)
+                    sizes[i] = matrices[i].length;
+                else {
+                    System.out.println("Given sequence of matrices can't be multiplied as their columns and rows are not matching");
+                    return null;
+                }
+            }
+        }
+        return sizes;
     }
 
     public static void main(String args[]) {
@@ -82,7 +102,7 @@ public class MatrixChainMultiplication {
                                   {3},
                                   {4}
                                 },
-                                { {1,2}
+                                { {1,2,3}
                                 },
                                 { {45,67,9},
                                   {6,8,10},
@@ -90,23 +110,14 @@ public class MatrixChainMultiplication {
                                 }
                              };
         int count = matrices.length;
-        int sizes[] = new int[matrices.length];
-        for(int i=0; i < matrices.length; i++) {
-            int j = 0;
-            for(int k = 0; k < matrices[i][j].length; k++) {
-                if( (i < matrices.length-1)) {
-                    if (matrices[i][j].length == matrices[i+1].length)
-                        sizes[i] = matrices[i].length;
-                    else
-                        System.out.println("Given sequence of matrices can't be multiplied as their columns and rows are not matching");
-                        break;
-                }
-                else if( i == matrices.length-1) {
-                    sizes[i] = matrices[i].length;
-                }
-            }
+
+        int sizes[] = calculateSizes(matrices, count);
+        if(sizes == null) {
+            System.out.println("Can't multiply given matrices as their sizes don't match");
         }
-        System.out.println("Sizes of given sequence of arrays in 2 dimensions is " +Arrays.toString(sizes));
-        System.out.println("Minimum number of multiplications required to multiply for given matrices is " + multiplier(sizes, count));
+        else{
+            System.out.println("Sizes of given sequence of arrays in 2 dimensions is " + Arrays.toString(sizes));
+            System.out.println("Minimum number of multiplications required to multiply for given matrices is " + multiplier(sizes, sizes.length));
+        }
     }
 }
