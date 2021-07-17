@@ -1,3 +1,4 @@
+// Find the minimum number of attempts required to find out when the egg will break when thrown from a max floor.
 package EggDrop;
 
 public class EggDrop {
